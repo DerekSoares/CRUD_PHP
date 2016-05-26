@@ -1,43 +1,41 @@
 <?php
-include 'conecta_mysql.inc';
+require_once ('conexao.php');
 //tabela exibida no index
 
-//sql
-$reso = mysqli_query($conexao,'select * from cadastroCRUD');
+	$conn = mysqli_connect(HOST,USER,SENHA,DATABASE);
+	$query = "SELECT * FROM cadastroCRUD "; //query isolada dentro da variável
 
-echo '
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Nomes</th>
-<th>Telefones</th>
+	 $result = mysqli_query($conn, $query);
 
-</tr>
-</thead>';
+		echo '<table class="table">
+		<thead>
+		<tr>
+		<th>ID</th>
+		<th>Nomes</th>
+		<th>Telefones</th>
+
+		</tr>
+		</thead>';
 
 //retorno do sql em forma de lista
-while ($row = mysqli_fetch_array($reso)) {
-    echo '<tr><td>'.$row['id_cadastro'].'</td><td>'.$row['nm_cadastro'].'</td><td>'.$row['tel_cadastro'].'</td></tr>';
-}
+		while ($row = mysqli_fetch_array($result)) 
+		{
+		    echo '<tr><td>'.$row['id_cadastro'].'</td><td>'.
+		    $row['nm_cadastro'].'</td><td>'.
+		    $row['tel_cadastro'].'</td></tr>';
+		}
 
+	mysqli_close($conn);
 echo '</table>';
+		
+		//Links de Atualizar e Deletar
+		echo '<table>';
+		echo '<tr><td><a href="atualiza.php" class="btn btn-success">Atualizar Registro</td>';
+		echo '<td><a href="deletar.php" class="btn btn-danger">Deletar Registro</td></tr>';
+		echo '</table>';
 
 ?>
-<!-- botões de atualizar e excluir-->
+
 <div class="container">
-	<table>
-		<tr>
-			<td>	
-				<form action="atualiza.php">
-					<button type="submit" >Atualizar Registros</button>
-				</form>
-			</td>
-			<td>
-				<form action="deletar.php">
-					<button type="submit" >Deletar Registros</button>
-				</form>
-			</td>
-		</tr>
-	</table>
+	
 </div>

@@ -1,52 +1,64 @@
+
+<?php 
+	require_once('conexao.php');
+ ?>
 <html>
 <head>
 	<title>Deletar</title>
-	
+	<meta charset="utf-8">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-	<!-- form que envia dados para este php procurar o registro-->
-	<form method= "POST" action="deletar.php">
-		<input type="text" class="form-control"name="ID" placeholder="Pesquise por ID"value=""><br/>
-		<button type="submit" name="enviar">Pesquisar</button>
-	</form>
-	<div class="container">
-		<!-- PHP que procura o registro e exibe campos para exclusão-->
+<div class="container">
+	<h2>Deletar Registro(s)</h2>
+	
+	<form method= "POST" action="deletar.php">	
+		<!--Exibe campos para excluir-->
 		<?php
         error_reporting(0);
         ini_set('display_errors', 0);
-        include 'conecta_mysql.inc';
+       
+        $conn = mysqli_connect(HOST, USER, SENHA, DATABASE);
 
-        $ID = $_POST['ID'];
-        //comando sql
-        $reso = mysqli_query($conexao,"select * from cadastroCRUD WHERE id_cadastro = '$ID' ");
+         //Exclui ID's com checkbox marcados
 
-        //retorno do comando sql no registro procurado em forma de tabela(while opcional)
-        while ($row = mysqli_fetch_array($reso)) {
-            echo '
-			<table>
-			<thead>
-			<tr>
-			<th>ID</th>
-			<th>Nome</th>
-			<th>Telefones</th>
+         if(isset($_POST['submit']))
+        {
+        	foreach ($_POST['todelete'] as $delete_id) 
+        	{
+        		$query = "DELETE FROM `cadastroCRUD` WHERE `id_cadastro` = $delete_id";
+        		mysqli_query($conn, $query) or die ('Erro ao enviar comando para o bando');
+        		
+        	}
 
-			</tr>
-			</thead>';
-
-            echo '<tr><td>'.$row['id_cadastro'].'</td><td>'.$row['nm_cadastro'].'</td><td>'.$row['tel_cadastro'].'</td></tr>';
-
-            //form criadoo em php que envia o ID para o exclusao.php processar a ação
-            echo "</table><table><tr><td>
-			DELETAR esse id?
-			<form method= 'POST' action='exclusao.php'>
-			<input type='text' id='valor' value='".$ID."' name='valor' readonly/>
-			<input type='submit' value='Submit' name='submit'>
-			</form>
-			</td><td>
-			</table>";
+        	
+        	echo 'Registro(s) removido(s).<br><hr>';
         }
 
+        $query = "SELECT * FROM cadastroCRUD ";
+        //comando sql
+        $result = mysqli_query($conn, $query);
+
+        //retorno do comando sql no registro procurado em forma de checkbox
+        while ($row = mysqli_fetch_array($result)) 
+        {
+            echo '<input type="checkbox" value="'. $row['id_cadastro'] .'" name="todelete[]">';
+            echo $row['nm_cadastro'];
+            echo ' '.$row['tel_cadastro'];
+            echo '<br>';
+        }
+
+       
+
+
+        mysqli_close($conn);
+
         ?>
+        <hr>
+        <input type='submit' value='Deletar' name='submit' class="btn btn-danger">
+        <a href="index.php">Voltar para página inicial</a>
+
+        </form>
 	</div>
 </body>
 </html>

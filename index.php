@@ -1,17 +1,25 @@
 <html>
 <head>
-<title>Crud PHP</title>
+	<title>Crud PHP</title>
+	<meta charset="utf-8">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="container">
+
+	<h2>Cadastrar Informações</h2>
 	<!--form que envia os dados para novo cadastro no cadastrar.php-->
 	<form method= "POST" action="cadastrar.php">
-		<input type="text" class="form-control"name="nome" placeholder="Nome real"value=""><br/>
-		<input type="text" class="form-control"name="telefone" placeholder="Telefone"value=""><br/>
-		<button type="submit" name="enviar">Cadastrar</button>
+		<label>Nome:</label>
+		<input type="text" class="form-control"name="nome" value=""><br/>
+
+		<label>Telefone:</label>
+		<input type="text" class="form-control"name="telefone" value=""><br/>
+		<input type="submit" name="enviar" value="Cadastrar" class="btn btn-primary">
 	</form>
-	<div class="container">
+	
 		<!-- Include exibe a tabela-->
 		<?php include 'tabela.php';?>
-	</div>
+</div>
 </body>
 </html>
